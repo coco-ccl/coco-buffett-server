@@ -9,5 +9,4 @@ public class CocoBuffettServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(CocoBuffettServerApplication.class, args);
     }
-
 }

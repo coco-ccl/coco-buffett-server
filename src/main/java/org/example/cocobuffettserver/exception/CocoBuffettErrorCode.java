@@ -8,6 +8,8 @@ public enum CocoBuffettErrorCode {
 
     // common
     INVALID_PARAM(HttpStatus.BAD_REQUEST, 10001, "invalid param"),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, 10002, "unauthorized"),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, 10003, "invalid token"),
 
     // member 20000 ~
     DUPLICATED_MEMBER_ID(HttpStatus.CONFLICT, 20001, "duplicated member id"),

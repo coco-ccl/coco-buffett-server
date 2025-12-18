@@ -49,4 +49,20 @@ public class MemberService {
                 .accessToken(accessToken)
                 .build();
     }
+
+    public String extractMemberIdFromToken(String token) {
+        try {
+            byte[] decodedBytes = Base64.getDecoder().decode(token);
+            String memberId = new String(decodedBytes);
+
+            // 회원이 존재하는지 검증
+            if (!memberRepository.existsById(memberId)) {
+                throw new CocoBuffettException(CocoBuffettErrorCode.INVALID_TOKEN);
+            }
+
+            return memberId;
+        } catch (IllegalArgumentException e) {
+            throw new CocoBuffettException(CocoBuffettErrorCode.INVALID_TOKEN);
+        }
+    }
 }
