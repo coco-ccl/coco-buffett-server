@@ -18,7 +18,6 @@ public enum CocoBuffettErrorCode {
 
     UNKNOWN_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, 99999, "unknown exception occured");
 
-
     private final HttpStatus httpStatus;
     private final Integer code;
     private final String message;
