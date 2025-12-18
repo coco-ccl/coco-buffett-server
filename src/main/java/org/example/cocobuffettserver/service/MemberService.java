@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.example.cocobuffettserver.dto.request.SignupRequest;
 import org.example.cocobuffettserver.entity.MemberEntity;
+import org.example.cocobuffettserver.exception.CocoBuffettErrorCode;
+import org.example.cocobuffettserver.exception.CocoBuffettException;
 import org.example.cocobuffettserver.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +19,7 @@ public class MemberService {
 
     public void signup(SignupRequest request) {
         if (memberRepository.existsById(request.getMemberId())) {
-            throw new RuntimeException("이미 존재하는 아이디입니다.");
+            throw new CocoBuffettException(CocoBuffettErrorCode.DUPLICATED_MEMBER_ID);
         }
 
         MemberEntity memberEntity = MemberEntity.builder()
