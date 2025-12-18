@@ -16,6 +16,10 @@ public enum CocoBuffettErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.UNAUTHORIZED, 20002, "member not found"),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, 20003, "invalid password"),
 
+    // item 30000 ~
+    ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, 30001, "item not found"),
+    ALREADY_OWNED_ITEM(HttpStatus.CONFLICT, 30002, "already owned item"),
+
     UNKNOWN_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, 99999, "unknown exception occured");
 
     private final HttpStatus httpStatus;

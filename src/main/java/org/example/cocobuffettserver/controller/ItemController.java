@@ -4,15 +4,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.example.cocobuffettserver.dto.common.ApiResponse;
+import org.example.cocobuffettserver.dto.request.ItemPurchaseRequest;
 import org.example.cocobuffettserver.dto.response.ItemResponse;
 import org.example.cocobuffettserver.exception.CocoBuffettErrorCode;
 import org.example.cocobuffettserver.exception.CocoBuffettException;
 import org.example.cocobuffettserver.service.ItemService;
 import org.example.cocobuffettserver.service.MemberService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,20 +27,34 @@ public class ItemController {
     public ApiResponse<List<ItemResponse>> getItems(
             @RequestHeader(value = "Authorization", required = false) String authorization) {
 
-        // Authorization 헤더 검증
         if (authorization == null || !authorization.startsWith("Bearer ")) {
             throw new CocoBuffettException(CocoBuffettErrorCode.UNAUTHORIZED);
         }
 
-        // Bearer 토큰 추출
         String token = authorization.substring(7);
 
-        // 토큰에서 memberId 추출
         String memberId = memberService.extractMemberIdFromToken(token);
 
-        // 아이템 리스트 조회
         List<ItemResponse> items = itemService.getItemList(memberId);
 
         return ApiResponse.success(items);
+    }
+
+    @PostMapping("/purchase")
+    public ApiResponse<Void> purchaseItem(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @RequestBody ItemPurchaseRequest request) {
+
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            throw new CocoBuffettException(CocoBuffettErrorCode.UNAUTHORIZED);
+        }
+
+        String token = authorization.substring(7);
+
+        String memberId = memberService.extractMemberIdFromToken(token);
+
+        itemService.purchaseItem(memberId, request.getItemId());
+
+        return ApiResponse.success();
     }
 }
