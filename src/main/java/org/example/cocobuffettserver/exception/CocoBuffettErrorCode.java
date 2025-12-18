@@ -11,6 +11,8 @@ public enum CocoBuffettErrorCode {
 
     // member 20000 ~
     DUPLICATED_MEMBER_ID(HttpStatus.CONFLICT, 20001, "duplicated member id"),
+    MEMBER_NOT_FOUND(HttpStatus.UNAUTHORIZED, 20002, "member not found"),
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, 20003, "invalid password"),
 
     UNKNOWN_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, 99999, "unknown exception occured");
 
