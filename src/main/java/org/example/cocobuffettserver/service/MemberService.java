@@ -1,5 +1,6 @@
 package org.example.cocobuffettserver.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,6 +31,7 @@ public class MemberService {
     MemberEquippedItemRepository memberEquippedItemRepository;
     AuthService authService;
 
+    @Transactional
     public void signup(SignupRequest request) {
         if (memberRepository.existsById(request.getMemberId())) {
             throw new CocoBuffettException(CocoBuffettErrorCode.DUPLICATED_MEMBER_ID);
@@ -66,7 +68,8 @@ public class MemberService {
         memberEquippedItemRepository.save(equippedItem);
     }
 
-    public SigninResponse signin(SigninRequest request) {
+    @Transactional
+    public SigninResponse signIn(SigninRequest request) {
         MemberEntity member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new CocoBuffettException(CocoBuffettErrorCode.MEMBER_NOT_FOUND));
 

@@ -29,7 +29,7 @@ public class MemberController {
 
     @PostMapping("/signin")
     public ApiResponse<SigninResponse> signIn(@RequestBody SigninRequest request) {
-        SigninResponse response = memberService.signin(request);
+        SigninResponse response = memberService.signIn(request);
         return ApiResponse.success(response);
     }
 }

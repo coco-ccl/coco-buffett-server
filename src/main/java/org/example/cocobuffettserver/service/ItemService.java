@@ -1,5 +1,6 @@
 package org.example.cocobuffettserver.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -67,6 +68,7 @@ public class ItemService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void purchaseItem(String memberId, String itemId) {
         MemberEntity member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CocoBuffettException(CocoBuffettErrorCode.MEMBER_NOT_FOUND));
@@ -87,6 +89,7 @@ public class ItemService {
         memberOwnedItemRepository.save(ownedItem);
     }
 
+    @Transactional
     public void equipItem(String memberId, String itemId) {
 
         ItemEntity item = itemRepository.findById(itemId)
