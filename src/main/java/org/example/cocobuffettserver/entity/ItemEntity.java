@@ -3,7 +3,6 @@ package org.example.cocobuffettserver.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.example.cocobuffettserver.converter.ItemTypeConverter;
 import org.example.cocobuffettserver.enums.ItemType;
 
 @Entity
@@ -20,7 +19,7 @@ public class ItemEntity {
     String itemId;
 
     @Column(nullable = false)
-    @Convert(converter = ItemTypeConverter.class)
+    @Enumerated(EnumType.STRING)
     ItemType type;
 
     @Column(nullable = false)
