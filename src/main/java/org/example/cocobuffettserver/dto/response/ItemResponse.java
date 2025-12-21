@@ -14,5 +14,6 @@ public class ItemResponse {
     String type;
     String name;
     Integer price;
+    String color;
     Boolean isOwned;
 }

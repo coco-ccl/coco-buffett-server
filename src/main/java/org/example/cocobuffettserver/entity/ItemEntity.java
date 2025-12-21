@@ -25,4 +25,7 @@ public class ItemEntity {
 
     @Column(nullable = false)
     Integer price;
+
+    @Column(nullable = false)
+    String color;
 }

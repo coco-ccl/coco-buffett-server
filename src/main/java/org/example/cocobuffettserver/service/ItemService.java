@@ -35,6 +35,7 @@ public class ItemService {
                         .type(item.getType())
                         .name(item.getName())
                         .price(item.getPrice())
+                        .color(item.getColor())
                         .isOwned(true)      // 수정 필요
                         .build())
                 .collect(Collectors.toList());
