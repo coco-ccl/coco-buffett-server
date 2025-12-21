@@ -3,6 +3,7 @@ package org.example.cocobuffettserver.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.example.cocobuffettserver.enums.ItemType;
 
 @Entity
 @Table(name = "tb_member_equipped_item")
@@ -32,21 +33,21 @@ public class MemberEquippedItemEntity {
     @Column(name = "shoes_item_id")
     String shoesItemId;
 
-    public void equipItem(String itemType, String itemId) {
+    public void equipItem(ItemType itemType, String itemId) {
         switch (itemType) {
-            case "face":
+            case FACE:
                 this.faceItemId = itemId;
                 break;
-            case "hair":
+            case HAIR:
                 this.hairItemId = itemId;
                 break;
-            case "top":
+            case TOP:
                 this.topItemId = itemId;
                 break;
-            case "bottom":
+            case BOTTOM:
                 this.bottomItemId = itemId;
                 break;
-            case "shoes":
+            case SHOES:
                 this.shoesItemId = itemId;
                 break;
         }
