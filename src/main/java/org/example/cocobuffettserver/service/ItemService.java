@@ -3,6 +3,7 @@ package org.example.cocobuffettserver.service;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.example.cocobuffettserver.dto.response.EquippedItemResponse;
 import org.example.cocobuffettserver.dto.response.ItemResponse;
 import org.example.cocobuffettserver.entity.ItemEntity;
 import org.example.cocobuffettserver.entity.MemberEntity;
@@ -16,6 +17,7 @@ import org.example.cocobuffettserver.repository.MemberOwnedItemRepository;
 import org.example.cocobuffettserver.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,5 +83,35 @@ public class ItemService {
         equippedItem.equipItem(item.getType(), itemId);
 
         memberEquippedItemRepository.save(equippedItem);
+    }
+
+    public List<EquippedItemResponse> getEquippedItems(String memberId) {
+
+        MemberEquippedItemEntity equippedItem = memberEquippedItemRepository.findById(memberId)
+                .orElse(null);
+
+        List<EquippedItemResponse> result = new ArrayList<>();
+
+        if (equippedItem == null) {
+            return result;
+        }
+
+        addEquippedItemIfExists(result, equippedItem.getFaceItemId());
+        addEquippedItemIfExists(result, equippedItem.getHairItemId());
+        addEquippedItemIfExists(result, equippedItem.getTopItemId());
+        addEquippedItemIfExists(result, equippedItem.getBottomItemId());
+        addEquippedItemIfExists(result, equippedItem.getShoesItemId());
+
+        return result;
+    }
+
+    private void addEquippedItemIfExists(List<EquippedItemResponse> result, String itemId) {
+        if (itemId != null) {
+            itemRepository.findById(itemId).ifPresent(item -> result.add(EquippedItemResponse.builder()
+                .itemId(item.getItemId())
+                .type(item.getType().name().toLowerCase())
+                .color(item.getColor())
+                .build()));
+        }
     }
 }

@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.example.cocobuffettserver.dto.common.ApiResponse;
 import org.example.cocobuffettserver.dto.request.ItemEquipRequest;
 import org.example.cocobuffettserver.dto.request.ItemPurchaseRequest;
+import org.example.cocobuffettserver.dto.response.EquippedItemResponse;
 import org.example.cocobuffettserver.dto.response.ItemResponse;
 import org.example.cocobuffettserver.exception.CocoBuffettErrorCode;
 import org.example.cocobuffettserver.exception.CocoBuffettException;
@@ -75,5 +76,22 @@ public class ItemController {
         itemService.equipItem(memberId, request.getItemId());
 
         return ApiResponse.success();
+    }
+
+    @GetMapping("/equipped")
+    public ApiResponse<List<EquippedItemResponse>> getEquippedItems(
+            @RequestHeader(value = "Authorization", required = false) String authorization) {
+
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            throw new CocoBuffettException(CocoBuffettErrorCode.UNAUTHORIZED);
+        }
+
+        String token = authorization.substring(7);
+
+        String memberId = memberService.extractMemberIdFromToken(token);
+
+        List<EquippedItemResponse> equippedItems = itemService.getEquippedItems(memberId);
+
+        return ApiResponse.success(equippedItems);
     }
 }
