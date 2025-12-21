@@ -37,7 +37,7 @@ public class ItemService {
         return allItems.stream()
                 .map(item -> ItemResponse.builder()
                         .itemId(item.getItemId())
-                        .type(item.getType())
+                        .type(item.getType().getValue())
                         .name(item.getName())
                         .price(item.getPrice())
                         .color(item.getColor())
@@ -109,7 +109,7 @@ public class ItemService {
         if (itemId != null) {
             itemRepository.findById(itemId).ifPresent(item -> result.add(EquippedItemResponse.builder()
                 .itemId(item.getItemId())
-                .type(item.getType().name().toLowerCase())
+                .type(item.getType().getValue())
                 .color(item.getColor())
                 .build()));
         }
