@@ -6,10 +6,12 @@ import lombok.experimental.FieldDefaults;
 import org.example.cocobuffettserver.dto.response.ItemResponse;
 import org.example.cocobuffettserver.entity.ItemEntity;
 import org.example.cocobuffettserver.entity.MemberEntity;
+import org.example.cocobuffettserver.entity.MemberEquippedItemEntity;
 import org.example.cocobuffettserver.entity.MemberOwnedItemEntity;
 import org.example.cocobuffettserver.exception.CocoBuffettErrorCode;
 import org.example.cocobuffettserver.exception.CocoBuffettException;
 import org.example.cocobuffettserver.repository.ItemRepository;
+import org.example.cocobuffettserver.repository.MemberEquippedItemRepository;
 import org.example.cocobuffettserver.repository.MemberOwnedItemRepository;
 import org.example.cocobuffettserver.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class ItemService {
     ItemRepository itemRepository;
     MemberRepository memberRepository;
     MemberOwnedItemRepository memberOwnedItemRepository;
+    MemberEquippedItemRepository memberEquippedItemRepository;
 
     public List<ItemResponse> getItemList(String memberId) {
         List<ItemEntity> allItems = itemRepository.findAll();
@@ -59,5 +62,24 @@ public class ItemService {
                 .build();
 
         memberOwnedItemRepository.save(ownedItem);
+    }
+
+    public void equipItem(String memberId, String itemId) {
+
+        ItemEntity item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new CocoBuffettException(CocoBuffettErrorCode.ITEM_NOT_FOUND));
+
+        if (!memberOwnedItemRepository.existsByMember_MemberIdAndItem_ItemId(memberId, itemId)) {
+            throw new CocoBuffettException(CocoBuffettErrorCode.ITEM_NOT_OWNED);
+        }
+
+        MemberEquippedItemEntity equippedItem = memberEquippedItemRepository.findById(memberId)
+                .orElse(MemberEquippedItemEntity.builder()
+                        .memberId(memberId)
+                        .build());
+
+        equippedItem.equipItem(item.getType(), itemId);
+
+        memberEquippedItemRepository.save(equippedItem);
     }
 }

@@ -43,3 +43,8 @@ INSERT INTO tb_item (item_id, type, name, price, color) VALUES
 ('shoes_brown', 'shoes', '갈색 구두', 150, 'brown'),
 ('sneakers_white', 'shoes', '흰색 운동화', 200, 'white'),
 ('sneakers_black', 'shoes', '검정 운동화', 200, 'black');
+
+-- tb_member_equipped_item
+INSERT INTO tb_member_equipped_item (member_id, face_item_id, hair_item_id, top_item_id, bottom_item_id, shoes_item_id) VALUES
+('user001', 'default', 'short_brown', 'tshirt_white', 'pants_black', 'shoes_black'),
+('admin', 'default', 'short_brown', 'tshirt_white', 'pants_black', 'shoes_black');
