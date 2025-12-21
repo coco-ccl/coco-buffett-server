@@ -19,8 +19,6 @@ import org.example.cocobuffettserver.repository.MemberOwnedItemRepository;
 import org.example.cocobuffettserver.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
-
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -30,6 +28,7 @@ public class MemberService {
     ItemRepository itemRepository;
     MemberOwnedItemRepository memberOwnedItemRepository;
     MemberEquippedItemRepository memberEquippedItemRepository;
+    AuthService authService;
 
     public void signup(SignupRequest request) {
         if (memberRepository.existsById(request.getMemberId())) {
@@ -75,26 +74,11 @@ public class MemberService {
             throw new CocoBuffettException(CocoBuffettErrorCode.INVALID_PASSWORD);
         }
 
-        String accessToken = Base64.getEncoder().encodeToString(member.getMemberId().getBytes());
+        String accessToken = authService.generateToken(member.getMemberId());
 
         return SigninResponse.builder()
                 .accessToken(accessToken)
                 .build();
     }
 
-    public String extractMemberIdFromToken(String token) {
-        try {
-            byte[] decodedBytes = Base64.getDecoder().decode(token);
-            String memberId = new String(decodedBytes);
-
-            // 회원이 존재하는지 검증
-            if (!memberRepository.existsById(memberId)) {
-                throw new CocoBuffettException(CocoBuffettErrorCode.INVALID_TOKEN);
-            }
-
-            return memberId;
-        } catch (IllegalArgumentException e) {
-            throw new CocoBuffettException(CocoBuffettErrorCode.INVALID_TOKEN);
-        }
-    }
 }

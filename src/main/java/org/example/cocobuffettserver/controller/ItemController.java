@@ -9,10 +9,8 @@ import org.example.cocobuffettserver.dto.request.ItemPurchaseRequest;
 import org.example.cocobuffettserver.dto.response.EquippedItemResponse;
 import org.example.cocobuffettserver.dto.response.ItemResponse;
 import org.example.cocobuffettserver.dto.response.OwnedItemResponse;
-import org.example.cocobuffettserver.exception.CocoBuffettErrorCode;
-import org.example.cocobuffettserver.exception.CocoBuffettException;
+import org.example.cocobuffettserver.service.AuthService;
 import org.example.cocobuffettserver.service.ItemService;
-import org.example.cocobuffettserver.service.MemberService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,19 +22,13 @@ import java.util.List;
 public class ItemController {
 
     ItemService itemService;
-    MemberService memberService;
+    AuthService authService;
 
     @GetMapping("/list")
     public ApiResponse<List<ItemResponse>> getItems(
             @RequestHeader(value = "Authorization", required = false) String authorization) {
 
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            throw new CocoBuffettException(CocoBuffettErrorCode.UNAUTHORIZED);
-        }
-
-        String token = authorization.substring(7);
-
-        String memberId = memberService.extractMemberIdFromToken(token);
+        String memberId = authService.extractMemberIdFromAuthorizationHeaderOrNull(authorization);
 
         List<ItemResponse> items = itemService.getItemList(memberId);
 
@@ -48,13 +40,7 @@ public class ItemController {
             @RequestHeader(value = "Authorization", required = false) String authorization,
             @RequestBody ItemPurchaseRequest request) {
 
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            throw new CocoBuffettException(CocoBuffettErrorCode.UNAUTHORIZED);
-        }
-
-        String token = authorization.substring(7);
-
-        String memberId = memberService.extractMemberIdFromToken(token);
+        String memberId = authService.extractMemberIdFromAuthorizationHeader(authorization);
 
         itemService.purchaseItem(memberId, request.getItemId());
 
@@ -66,13 +52,7 @@ public class ItemController {
             @RequestHeader(value = "Authorization", required = false) String authorization,
             @RequestBody ItemEquipRequest request) {
 
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            throw new CocoBuffettException(CocoBuffettErrorCode.UNAUTHORIZED);
-        }
-
-        String token = authorization.substring(7);
-
-        String memberId = memberService.extractMemberIdFromToken(token);
+        String memberId = authService.extractMemberIdFromAuthorizationHeader(authorization);
 
         itemService.equipItem(memberId, request.getItemId());
 
@@ -83,13 +63,7 @@ public class ItemController {
     public ApiResponse<List<EquippedItemResponse>> getEquippedItems(
             @RequestHeader(value = "Authorization", required = false) String authorization) {
 
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            throw new CocoBuffettException(CocoBuffettErrorCode.UNAUTHORIZED);
-        }
-
-        String token = authorization.substring(7);
-
-        String memberId = memberService.extractMemberIdFromToken(token);
+        String memberId = authService.extractMemberIdFromAuthorizationHeader(authorization);
 
         List<EquippedItemResponse> equippedItems = itemService.getEquippedItems(memberId);
 
@@ -100,13 +74,7 @@ public class ItemController {
     public ApiResponse<List<OwnedItemResponse>> getOwnedItems(
             @RequestHeader(value = "Authorization", required = false) String authorization) {
 
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            throw new CocoBuffettException(CocoBuffettErrorCode.UNAUTHORIZED);
-        }
-
-        String token = authorization.substring(7);
-
-        String memberId = memberService.extractMemberIdFromToken(token);
+        String memberId = authService.extractMemberIdFromAuthorizationHeader(authorization);
 
         List<OwnedItemResponse> ownedItems = itemService.getOwnedItems(memberId);
 
