@@ -34,6 +34,11 @@ public class ItemService {
 
     public List<ItemResponse> getItemList(String memberId) {
         List<ItemEntity> allItems = itemRepository.findAll();
+        List<MemberOwnedItemEntity> ownedItems = memberOwnedItemRepository.findByMember_MemberId(memberId);
+
+        var ownedItemIds = ownedItems.stream()
+                .map(ownedItem -> ownedItem.getItem().getItemId())
+                .collect(Collectors.toSet());
 
         return allItems.stream()
                 .map(item -> ItemResponse.builder()
@@ -42,7 +47,7 @@ public class ItemService {
                         .name(item.getName())
                         .price(item.getPrice())
                         .color(item.getColor())
-                        .isOwned(true)      // 수정 필요
+                        .isOwned(ownedItemIds.contains(item.getItemId()))
                         .build())
                 .collect(Collectors.toList());
     }
