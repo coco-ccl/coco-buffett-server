@@ -8,6 +8,7 @@ import org.example.cocobuffettserver.dto.request.ItemEquipRequest;
 import org.example.cocobuffettserver.dto.request.ItemPurchaseRequest;
 import org.example.cocobuffettserver.dto.response.EquippedItemResponse;
 import org.example.cocobuffettserver.dto.response.ItemResponse;
+import org.example.cocobuffettserver.dto.response.OwnedItemResponse;
 import org.example.cocobuffettserver.exception.CocoBuffettErrorCode;
 import org.example.cocobuffettserver.exception.CocoBuffettException;
 import org.example.cocobuffettserver.service.ItemService;
@@ -93,5 +94,22 @@ public class ItemController {
         List<EquippedItemResponse> equippedItems = itemService.getEquippedItems(memberId);
 
         return ApiResponse.success(equippedItems);
+    }
+
+    @GetMapping("/owned/me")
+    public ApiResponse<List<OwnedItemResponse>> getOwnedItems(
+            @RequestHeader(value = "Authorization", required = false) String authorization) {
+
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            throw new CocoBuffettException(CocoBuffettErrorCode.UNAUTHORIZED);
+        }
+
+        String token = authorization.substring(7);
+
+        String memberId = memberService.extractMemberIdFromToken(token);
+
+        List<OwnedItemResponse> ownedItems = itemService.getOwnedItems(memberId);
+
+        return ApiResponse.success(ownedItems);
     }
 }

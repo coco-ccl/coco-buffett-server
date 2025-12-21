@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.example.cocobuffettserver.dto.response.EquippedItemResponse;
 import org.example.cocobuffettserver.dto.response.ItemResponse;
+import org.example.cocobuffettserver.dto.response.OwnedItemResponse;
 import org.example.cocobuffettserver.entity.ItemEntity;
 import org.example.cocobuffettserver.entity.MemberEntity;
 import org.example.cocobuffettserver.entity.MemberEquippedItemEntity;
@@ -113,5 +114,21 @@ public class ItemService {
                 .color(item.getColor())
                 .build()));
         }
+    }
+
+    public List<OwnedItemResponse> getOwnedItems(String memberId) {
+        List<MemberOwnedItemEntity> ownedItems = memberOwnedItemRepository.findByMember_MemberId(memberId);
+
+        return ownedItems.stream()
+                .map(ownedItem -> {
+                    ItemEntity item = ownedItem.getItem();
+                    return OwnedItemResponse.builder()
+                            .itemId(item.getItemId())
+                            .type(item.getType().getValue())
+                            .color(item.getColor())
+                            .price(item.getPrice())
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 }
