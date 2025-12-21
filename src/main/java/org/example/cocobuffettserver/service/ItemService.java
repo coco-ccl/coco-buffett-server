@@ -34,6 +34,21 @@ public class ItemService {
 
     public List<ItemResponse> getItemList(String memberId) {
         List<ItemEntity> allItems = itemRepository.findAll();
+
+        // memberId가 null이면 모든 아이템의 isOwned를 false로 설정
+        if (memberId == null) {
+            return allItems.stream()
+                    .map(item -> ItemResponse.builder()
+                            .itemId(item.getItemId())
+                            .type(item.getType().getValue())
+                            .name(item.getName())
+                            .price(item.getPrice())
+                            .color(item.getColor())
+                            .isOwned(false)
+                            .build())
+                    .collect(Collectors.toList());
+        }
+
         List<MemberOwnedItemEntity> ownedItems = memberOwnedItemRepository.findByMember_MemberId(memberId);
 
         var ownedItemIds = ownedItems.stream()
