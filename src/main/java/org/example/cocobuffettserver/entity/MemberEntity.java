@@ -22,4 +22,7 @@ public class MemberEntity {
     
     @Column(nullable = false)
     String nickname;
+
+    @Column(nullable = false)
+    Long balance;
 }

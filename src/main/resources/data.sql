@@ -1,7 +1,7 @@
 -- tb_member
-INSERT INTO tb_member (member_id, password, nickname) VALUES
-('user001', 'password123', '홍길동'),
-('admin', 'admin123', '관리자');
+INSERT INTO tb_member (member_id, password, nickname, balance) VALUES
+('user001', 'password123', '홍길동', 5000000),
+('admin', 'admin123', '관리자', 5000000);
 
 -- tb_item
 -- 얼굴

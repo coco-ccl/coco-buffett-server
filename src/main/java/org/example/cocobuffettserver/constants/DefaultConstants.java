@@ -2,7 +2,9 @@ package org.example.cocobuffettserver.constants;
 
 import java.util.List;
 
-public class DefaultItemConstants {
+public class DefaultConstants {
+
+    public static final Long INITIAL_BALANCE = 5000000L;
 
     public static final String DEFAULT_FACE_ITEM_ID = "default";
     public static final String DEFAULT_HAIR_ITEM_ID = "short_brown";
@@ -18,6 +20,6 @@ public class DefaultItemConstants {
             DEFAULT_SHOES_ITEM_ID
     );
 
-    private DefaultItemConstants() {
+    private DefaultConstants() {
     }
 }
