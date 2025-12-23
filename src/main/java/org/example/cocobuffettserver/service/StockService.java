@@ -74,14 +74,15 @@ public class StockService {
                 .orElseThrow(() -> new CocoBuffettException(CocoBuffettErrorCode.STOCK_NOT_FOUND));
 
         if (request.getTradeType() == TradeType.BUY) {
-            handleBuy(member, stock, request.getQuantity(), request.getPrice());
+            handleBuy(member, stock, request.getQuantity());
         } else if (request.getTradeType() == TradeType.SELL) {
-            handleSell(member, stock, request.getQuantity(), request.getPrice());
+            handleSell(member, stock, request.getQuantity());
         }
     }
 
-    private void handleBuy(MemberEntity member, StockEntity stock, Integer quantity, Long price) {
-        long totalPrice = price * quantity;
+    private void handleBuy(MemberEntity member, StockEntity stock, Integer quantity) {
+        long currentPrice = stock.getCurrentPrice();
+        long totalPrice = currentPrice * quantity;
 
         if (member.getBalance() < totalPrice) {
             throw new CocoBuffettException(CocoBuffettErrorCode.INSUFFICIENT_BALANCE);
@@ -105,7 +106,7 @@ public class StockService {
         }
     }
 
-    private void handleSell(MemberEntity member, StockEntity stock, Integer quantity, Long price) {
+    private void handleSell(MemberEntity member, StockEntity stock, Integer quantity) {
         MemberStockEntity memberStock = memberStockRepository
                 .findByMember_MemberIdAndStock_Ticker(member.getMemberId(), stock.getTicker())
                 .orElseThrow(() -> new CocoBuffettException(CocoBuffettErrorCode.INSUFFICIENT_STOCK));
@@ -114,7 +115,8 @@ public class StockService {
             throw new CocoBuffettException(CocoBuffettErrorCode.INSUFFICIENT_STOCK);
         }
 
-        long totalPrice = price * quantity;
+        long currentPrice = stock.getCurrentPrice();
+        long totalPrice = currentPrice * quantity;
 
         memberStock.subtractQuantity(quantity);
 

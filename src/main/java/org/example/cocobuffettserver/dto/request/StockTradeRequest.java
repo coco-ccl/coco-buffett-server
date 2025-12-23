@@ -13,5 +13,4 @@ public class StockTradeRequest {
     String ticker;
     TradeType tradeType;
     Integer quantity;
-    Long price;
 }
