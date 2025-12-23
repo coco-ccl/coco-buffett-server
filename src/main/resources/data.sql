@@ -48,3 +48,26 @@ INSERT INTO tb_item (item_id, type, name, price, color) VALUES
 INSERT INTO tb_member_equipped_item (member_id, face_item_id, hair_item_id, top_item_id, bottom_item_id, shoes_item_id) VALUES
 ('user001', 'default', 'short_brown', 'tshirt_white', 'pants_black', 'shoes_black'),
 ('admin', 'default', 'short_brown', 'tshirt_white', 'pants_black', 'shoes_black');
+
+-- tb_stock
+INSERT INTO tb_stock (ticker, name, current_price) VALUES
+('AAPL', '애플망고', 250000),
+('TSLA', '테슬람', 320000),
+('MSFT', '마이크로소프트웨어', 450000),
+('AMZN', '아마존강', 210000),
+('NVDA', '엔비디약', 680000),
+('META', '메타버스', 580000),
+('GOOGL', '알파벳수프', 185000),
+('NFLX', '넷플릭스앤칠', 720000),
+('ORCL', '오라클카드', 145000),
+('INTC', '인텔리전스', 65000),
+('BABA', '알리바바바', 125000),
+('DIS', '디즈니랜드마크', 195000),
+('PYPL', '페이팔팔', 88000),
+('ADBE', '어도비누', 630000),
+('CSCO', '시스코킹', 72000),
+('CRM', '세일즈포스텔라', 340000),
+('QCOM', '퀄컴온', 178000),
+('TXN', '텍사스치킨', 220000),
+('AVGO', '브로드컴퍼니', 1850000),
+('SHOP', '쇼피파이', 105000);
