@@ -20,6 +20,7 @@ import org.example.cocobuffettserver.repository.StockRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +31,7 @@ public class StockService {
     StockRepository stockRepository;
     MemberRepository memberRepository;
     MemberStockRepository memberStockRepository;
+    Random random = new Random();
 
     public List<StockResponse> getStockList() {
         List<StockEntity> stocks = stockRepository.findAll();
@@ -121,5 +123,24 @@ public class StockService {
         }
 
         member.addBalance(totalPrice);
+    }
+
+    @Transactional
+    public void updateAllStockPrices() {
+        List<StockEntity> stocks = stockRepository.findAll();
+
+        for (StockEntity stock : stocks) {
+            long currentPrice = stock.getCurrentPrice();
+
+            double changeRate = (random.nextDouble() * 0.1) - 0.05;
+            long priceChange = (long) (currentPrice * changeRate);
+            long newPrice = currentPrice + priceChange;
+
+            if (newPrice < 1000) {
+                newPrice = 1000;
+            }
+
+            stock.updatePrice(newPrice);
+        }
     }
 }
