@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import org.example.cocobuffettserver.constants.DefaultConstants;
 import org.example.cocobuffettserver.dto.request.SigninRequest;
 import org.example.cocobuffettserver.dto.request.SignupRequest;
+import org.example.cocobuffettserver.dto.response.MemberInfoResponse;
 import org.example.cocobuffettserver.dto.response.SigninResponse;
 import org.example.cocobuffettserver.entity.ItemEntity;
 import org.example.cocobuffettserver.entity.MemberEntity;
@@ -82,6 +83,17 @@ public class MemberService {
 
         return SigninResponse.builder()
                 .accessToken(accessToken)
+                .build();
+    }
+
+    public MemberInfoResponse getMemberInfo(String memberId) {
+        MemberEntity member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CocoBuffettException(CocoBuffettErrorCode.MEMBER_NOT_FOUND));
+
+        return MemberInfoResponse.builder()
+                .id(member.getMemberId())
+                .nickname(member.getNickname())
+                .profileImageUrl(member.getProfileImageUrl())
                 .build();
     }
 

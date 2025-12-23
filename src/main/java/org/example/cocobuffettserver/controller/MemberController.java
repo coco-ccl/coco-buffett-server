@@ -6,8 +6,10 @@ import lombok.experimental.FieldDefaults;
 import org.example.cocobuffettserver.dto.request.SigninRequest;
 import org.example.cocobuffettserver.dto.request.SignupRequest;
 import org.example.cocobuffettserver.dto.common.ApiResponse;
+import org.example.cocobuffettserver.dto.response.MemberInfoResponse;
 import org.example.cocobuffettserver.dto.response.MemberStocksResponse;
 import org.example.cocobuffettserver.dto.response.SigninResponse;
+import org.example.cocobuffettserver.service.AuthService;
 import org.example.cocobuffettserver.service.MemberService;
 import org.example.cocobuffettserver.service.StockService;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ public class MemberController {
 
     MemberService memberService;
     StockService stockService;
+    AuthService authService;
 
     @PostMapping("/signup")
     public ApiResponse<Void> signUp(@RequestBody SignupRequest request) {
@@ -30,6 +33,16 @@ public class MemberController {
     @PostMapping("/signin")
     public ApiResponse<SigninResponse> signIn(@RequestBody SigninRequest request) {
         SigninResponse response = memberService.signIn(request);
+        return ApiResponse.success(response);
+    }
+
+    @GetMapping("/me")
+    public ApiResponse<MemberInfoResponse> getMyInfo(
+            @RequestHeader(value = "Authorization", required = false) String authorization) {
+
+        String memberId = authService.extractMemberIdFromAuthorizationHeader(authorization);
+
+        MemberInfoResponse response = memberService.getMemberInfo(memberId);
         return ApiResponse.success(response);
     }
 

@@ -26,6 +26,9 @@ public class MemberEntity {
     @Column(nullable = false)
     Long balance;
 
+    @Column
+    String profileImageUrl;
+
     public void deductBalance(long amount) {
         this.balance -= amount;
     }
