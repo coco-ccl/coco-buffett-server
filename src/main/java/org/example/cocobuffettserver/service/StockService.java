@@ -56,6 +56,7 @@ public class StockService {
                         .name(memberStock.getStock().getName())
                         .ticker(memberStock.getStock().getTicker())
                         .quantity(memberStock.getQuantity())
+                        .currentPrice(memberStock.getStock().getCurrentPrice())
                         .build())
                 .collect(Collectors.toList());
 
