@@ -25,4 +25,8 @@ public class MemberEntity {
 
     @Column(nullable = false)
     Long balance;
+
+    public void deductBalance(long amount) {
+        this.balance -= amount;
+    }
 }

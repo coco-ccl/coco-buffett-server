@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.example.cocobuffettserver.dto.response.EquippedItemResponse;
+import org.example.cocobuffettserver.dto.response.ItemPurchaseResponse;
 import org.example.cocobuffettserver.dto.response.ItemResponse;
 import org.example.cocobuffettserver.dto.response.OwnedItemResponse;
 import org.example.cocobuffettserver.entity.ItemEntity;
@@ -69,7 +70,7 @@ public class ItemService {
     }
 
     @Transactional
-    public void purchaseItem(String memberId, String itemId) {
+    public ItemPurchaseResponse purchaseItem(String memberId, String itemId) {
         MemberEntity member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CocoBuffettException(CocoBuffettErrorCode.MEMBER_NOT_FOUND));
 
@@ -81,12 +82,24 @@ public class ItemService {
             throw new CocoBuffettException(CocoBuffettErrorCode.ALREADY_OWNED_ITEM);
         }
 
+        // 잔액 확인
+        if (member.getBalance() < item.getPrice()) {
+            throw new CocoBuffettException(CocoBuffettErrorCode.INSUFFICIENT_BALANCE);
+        }
+
+        // 잔액 차감
+        member.deductBalance(item.getPrice());
+
         MemberOwnedItemEntity ownedItem = MemberOwnedItemEntity.builder()
                 .member(member)
                 .item(item)
                 .build();
 
         memberOwnedItemRepository.save(ownedItem);
+
+        return ItemPurchaseResponse.builder()
+                .remainingBalance(member.getBalance())
+                .build();
     }
 
     @Transactional

@@ -20,6 +20,7 @@ public enum CocoBuffettErrorCode {
     ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, 30001, "item not found"),
     ALREADY_OWNED_ITEM(HttpStatus.CONFLICT, 30002, "already owned item"),
     ITEM_NOT_OWNED(HttpStatus.FORBIDDEN, 30003, "item not owned"),
+    INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, 30004, "insufficient balance"),
 
     UNKNOWN_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, 99999, "unknown exception occured");
 

@@ -7,6 +7,7 @@ import org.example.cocobuffettserver.dto.common.ApiResponse;
 import org.example.cocobuffettserver.dto.request.ItemEquipRequest;
 import org.example.cocobuffettserver.dto.request.ItemPurchaseRequest;
 import org.example.cocobuffettserver.dto.response.EquippedItemResponse;
+import org.example.cocobuffettserver.dto.response.ItemPurchaseResponse;
 import org.example.cocobuffettserver.dto.response.ItemResponse;
 import org.example.cocobuffettserver.dto.response.OwnedItemResponse;
 import org.example.cocobuffettserver.service.AuthService;
@@ -36,15 +37,15 @@ public class ItemController {
     }
 
     @PostMapping("/purchase")
-    public ApiResponse<Void> purchaseItem(
+    public ApiResponse<ItemPurchaseResponse> purchaseItem(
             @RequestHeader(value = "Authorization", required = false) String authorization,
             @RequestBody ItemPurchaseRequest request) {
 
         String memberId = authService.extractMemberIdFromAuthorizationHeader(authorization);
 
-        itemService.purchaseItem(memberId, request.getItemId());
+        ItemPurchaseResponse response = itemService.purchaseItem(memberId, request.getItemId());
 
-        return ApiResponse.success();
+        return ApiResponse.success(response);
     }
 
     @PostMapping("/equip")
