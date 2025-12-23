@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.example.cocobuffettserver.dto.request.StockTradeRequest;
+import org.example.cocobuffettserver.dto.response.MemberStockInfo;
+import org.example.cocobuffettserver.dto.response.MemberStocksResponse;
 import org.example.cocobuffettserver.dto.response.StockResponse;
 import org.example.cocobuffettserver.entity.MemberEntity;
 import org.example.cocobuffettserver.entity.MemberStockEntity;
@@ -39,6 +41,26 @@ public class StockService {
                         .currentPrice(stock.getCurrentPrice())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public MemberStocksResponse getMemberStocks(String memberId) {
+        MemberEntity member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CocoBuffettException(CocoBuffettErrorCode.MEMBER_NOT_FOUND));
+
+        List<MemberStockEntity> memberStocks = memberStockRepository.findByMember_MemberId(memberId);
+
+        List<MemberStockInfo> stockInfos = memberStocks.stream()
+                .map(memberStock -> MemberStockInfo.builder()
+                        .name(memberStock.getStock().getName())
+                        .ticker(memberStock.getStock().getTicker())
+                        .quantity(memberStock.getQuantity())
+                        .build())
+                .collect(Collectors.toList());
+
+        return MemberStocksResponse.builder()
+                .deposit(member.getBalance())
+                .stocks(stockInfos)
+                .build();
     }
 
     @Transactional
