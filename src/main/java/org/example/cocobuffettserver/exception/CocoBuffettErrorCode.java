@@ -22,6 +22,10 @@ public enum CocoBuffettErrorCode {
     ITEM_NOT_OWNED(HttpStatus.FORBIDDEN, 30003, "item not owned"),
     INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, 30004, "insufficient balance"),
 
+    // stock 40000 ~
+    STOCK_NOT_FOUND(HttpStatus.NOT_FOUND, 40001, "stock not found"),
+    INSUFFICIENT_STOCK(HttpStatus.BAD_REQUEST, 40002, "insufficient stock quantity"),
+
     UNKNOWN_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, 99999, "unknown exception occured");
 
     private final HttpStatus httpStatus;

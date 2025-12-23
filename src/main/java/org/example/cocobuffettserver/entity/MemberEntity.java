@@ -29,4 +29,8 @@ public class MemberEntity {
     public void deductBalance(long amount) {
         this.balance -= amount;
     }
+
+    public void addBalance(long amount) {
+        this.balance += amount;
+    }
 }
