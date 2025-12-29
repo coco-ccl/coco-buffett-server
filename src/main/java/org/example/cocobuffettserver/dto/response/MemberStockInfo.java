@@ -14,4 +14,5 @@ public class MemberStockInfo {
     String ticker;
     Integer quantity;
     Long currentPrice;
+    Long profitRate;
 }
